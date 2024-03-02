@@ -10,7 +10,9 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -28,6 +30,8 @@ public final class BetterSnow
         // do nothing server side
         if(!FMLEnvironment.dist.isClient())
             return;
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, BUILDER.build());
 
         NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.class, event -> {
             // quit out early if disabled
