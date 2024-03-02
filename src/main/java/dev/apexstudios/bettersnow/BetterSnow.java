@@ -40,7 +40,6 @@ public final class BetterSnow
                 return;
 
             var level = Minecraft.getInstance().level;
-            var pos = event.getCamera().getBlockPosition();
 
             if(level == null)
                 return;
@@ -48,35 +47,41 @@ public final class BetterSnow
             if(event.getStage() != RenderLevelStageEvent.Stage.AFTER_WEATHER)
                 return;
 
-            // only if it is currently raining
-            // and biome has snowfall instead of rainfall
-            // isRainingAt(pos) is 'false' in snowy biomes
-            if(level.getRainLevel(event.getPartialTick()) > 0F && level.getBiome(pos).value().getPrecipitationAt(pos) == Biome.Precipitation.SNOW)
+            var partialTick = event.getPartialTick();
+            var pos = event.getCamera().getBlockPosition();
+
+            // copied from ClientLevel#animateTick (same entry point for Biome AmbientFX)
+            var x = pos.getX();
+            var y = pos.getY();
+            var z = pos.getZ();
+
+            var mutablePos = new BlockPos.MutableBlockPos();
+
+            for(var j = 0; j < 667; j++)
             {
-                // copied from ClientLevel#animateTick (same entry point for Biome AmbientFX)
-                var x = pos.getX();
-                var y = pos.getY();
-                var z = pos.getZ();
-
-                var mutablePos = new BlockPos.MutableBlockPos();
-
-                for(var j = 0; j < 667; j++)
-                {
-                    addParticle(level, x, y, z, mutablePos, 16);
-                    addParticle(level, x, y, z, mutablePos, 32);
-                }
+                addParticle(level, x, y, z, mutablePos, 16, partialTick);
+                addParticle(level, x, y, z, mutablePos, 32, partialTick);
             }
         });
     }
 
     // Copied from ClientLevel#doAnimateTick
-    private void addParticle(ClientLevel level, int x, int y, int z, BlockPos.MutableBlockPos pos, int range)
+    private void addParticle(ClientLevel level, int x, int y, int z, BlockPos.MutableBlockPos pos, int range, float partialTick)
     {
         pos.set(
                 x + level.random.nextInt(range) - level.random.nextInt(range),
                 y + level.random.nextInt(range) - level.random.nextInt(range),
                 z + level.random.nextInt(range) - level.random.nextInt(range)
         );
+
+        // only if raining and biome should be snowfall not rainfall
+        if(level.getRainLevel(partialTick) <= 0F)
+            return;
+        if(level.getBiome(pos).value().getPrecipitationAt(pos) != Biome.Precipitation.SNOW)
+            return;
+        // only if pos can see sky, (not inside of caves, houses, under trees etc)
+        if(!level.canSeeSky(pos))
+            return;
 
         var blockState = level.getBlockState(pos);
 
