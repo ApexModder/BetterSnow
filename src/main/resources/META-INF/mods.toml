@@ -1,5 +1,5 @@
 license = "AllRightsReserved"
-issueTrackerURL = "https://discord.apexstudios.dev/"
+issueTrackerURL = "https://github.com/ApexModder/BetterSnow/issues"
 modLoader = "javafml"
 loaderVersion = "[2,)"
 
@@ -7,12 +7,12 @@ loaderVersion = "[2,)"
     modId = "${MOD_ID}"
     displayName = "${MOD_NAME}"
     version = "${MOD_VERSION}"
-    displayURL = "https://apexstudios.dev/${MOD_ID}"
+    displayURL = "https://github.com/ApexModder/BetterSnow"
     # updateJSONURL = "https://api.modrinth.com/updates/${MOD_ID}/forge_updates.json"
     credits = "ApexStudios"
     logoFile = "banner.png"
-    description = "Library Mod required by all of ApexStudios' Mods"
-    authors = "Apex, FantasyGaming, RudySPG and TobiSPG"
+    description = "Replaces Vanilla Snow FX with the 'WHITE_ASH' particle"
+    authors = "Apex"
 
     [["dependencies.${MOD_ID}"]]
         modId = "minecraft"
