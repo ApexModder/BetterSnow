@@ -1,0 +1,8 @@
+{
+    "required": true,
+    "package": "dev.apexstudios.bettersnow.mixin",
+    "mixins": [],
+    "client": [],
+    "server": [],
+    "minVersion": "0.8"
+}

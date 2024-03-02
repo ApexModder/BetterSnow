@@ -26,3 +26,6 @@ loaderVersion = "[2,)"
         type = "required"
         ordering = "NONE"
         side = "BOTH"
+
+    [[mixins]]
+        config="bettersnow.mixins.json"
