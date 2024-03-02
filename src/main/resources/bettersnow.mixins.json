@@ -2,7 +2,9 @@
     "required": true,
     "package": "dev.apexstudios.bettersnow.mixin",
     "mixins": [],
-    "client": [],
+    "client": [
+        "client.LevelRendererMixin"
+    ],
     "server": [],
     "minVersion": "0.8"
 }
