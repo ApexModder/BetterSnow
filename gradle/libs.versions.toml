@@ -3,7 +3,7 @@
 
 [libraries]
     parchment={ module="org.parchmentmc.data:parchment-1.20.4", version="2024.02.25" }
-    neoforge={ module="net.neoforged:neoforge", version="20.4.184" }
+    neoforge={ module="net.neoforged:neoforge", version="20.4.190" }
     devlogin={ module="net.covers1624:DevLogin", version="0.1.+" }
 
 [plugins]
