@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.biome.Biome;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
@@ -46,22 +47,24 @@ public final class BetterSnow
             // add particles after weather
             if(event.getStage() != RenderLevelStageEvent.Stage.AFTER_WEATHER)
                 return;
+
             // only if it is currently raining
+            // and biome has snowfall instead of rainfall
             // isRainingAt(pos) is 'false' in snowy biomes
-            if(level.getRainLevel(event.getPartialTick()) <= 0F)
-                return;
-
-            // copied from ClientLevel#animateTick (same entry point for Biome AmbientFX)
-            var x = pos.getX();
-            var y = pos.getY();
-            var z = pos.getZ();
-
-            var mutablePos = new BlockPos.MutableBlockPos();
-
-            for(var j = 0; j < 667; j++)
+            if(level.getRainLevel(event.getPartialTick()) > 0F && level.getBiome(pos).value().getPrecipitationAt(pos) == Biome.Precipitation.SNOW)
             {
-                addParticle(level, x, y, z, mutablePos, 16);
-                addParticle(level, x, y, z, mutablePos, 32);
+                // copied from ClientLevel#animateTick (same entry point for Biome AmbientFX)
+                var x = pos.getX();
+                var y = pos.getY();
+                var z = pos.getZ();
+
+                var mutablePos = new BlockPos.MutableBlockPos();
+
+                for(var j = 0; j < 667; j++)
+                {
+                    addParticle(level, x, y, z, mutablePos, 16);
+                    addParticle(level, x, y, z, mutablePos, 32);
+                }
             }
         });
     }
