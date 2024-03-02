@@ -1,0 +1,14 @@
+[versions]
+    java="17"
+
+[libraries]
+    parchment={ module="org.parchmentmc.data:parchment-1.20.4", version="2024.02.25" }
+    neoforge={ module="net.neoforged:neoforge", version="20.4.184" }
+    devlogin={ module="net.covers1624:DevLogin", version="0.1.+" }
+
+[plugins]
+    idea-ext={ id="org.jetbrains.gradle.plugin.idea-ext", version="1.1.+" }
+    neogradle={ id="net.neoforged.gradle.userdev", version="7.0.94" }
+    gradle-utils={ id="net.neoforged.gradleutils", version="3.0.0-alpha.10" }
+    spotless={ id="com.diffplug.spotless", version="6.22.0" }
+    licesner={ id="net.neoforged.licenser", version="0.7.2" }

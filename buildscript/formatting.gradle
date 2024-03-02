@@ -1,0 +1,37 @@
+license {
+    header file('buildscript/HEADER.txt')
+
+    tasks {
+        apexstudios {
+            files.from fileTree('src', {
+                include '**/*.java'
+            })
+        }
+    }
+}
+
+spotless {
+    java {
+        target fileTree('src', {
+            include '**/*.java'
+        })
+
+        endWithNewline()
+        indentWithSpaces()
+        removeUnusedImports()
+        toggleOffOn()
+    }
+}
+
+tasks.named('spotlessApply').get().mustRunAfter tasks.named('licenseFormat').get()
+tasks.named('spotlessCheck').get().mustRunAfter tasks.named('licenseCheck').get()
+
+tasks.register('applyAllFormatting') {
+    dependsOn tasks.named('licenseFormat').get()
+    dependsOn tasks.named('spotlessApply').get()
+}
+
+tasks.register('checkFormatting') {
+    dependsOn tasks.named('licenseCheck').get()
+    dependsOn tasks.named('spotlessCheck').get()
+}

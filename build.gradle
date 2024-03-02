@@ -1,0 +1,45 @@
+plugins {
+    id 'java-library'
+    id 'idea'
+    id 'maven-publish'
+
+    alias libs.plugins.idea.ext
+    alias libs.plugins.neogradle
+    alias libs.plugins.gradle.utils
+    alias libs.plugins.spotless
+    alias libs.plugins.licesner
+}
+
+gradleutils.version {
+    tags {
+        label = 'beta'
+        cleanMarkerLabel = 'stable'
+    }
+
+    branches {
+        suffixExemptedBranches '20.4/dev'
+        suffixBranch = true
+    }
+}
+
+changelog {
+    from '20.4'
+    disableAutomaticPublicationRegistration()
+}
+
+ext {
+    MOD_NAME = rootProject.name
+    MOD_ID = MOD_NAME.toLowerCase()
+    MOD_VERSION = gradleutils.version.toString()
+}
+
+println "$MOD_NAME v$MOD_VERSION"
+
+repositories {
+    maven { url 'https://maven.apexstudios.dev/releases' }
+}
+
+apply from: 'buildscript/formatting.gradle'
+apply from: 'buildscript/java.gradle'
+apply from: 'buildscript/neo.gradle'
+apply from: 'buildscript/publishing.gradle'

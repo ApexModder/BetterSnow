@@ -1,0 +1,25 @@
+on:
+    push:
+
+jobs:
+    check-formatting:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 1000
+                  fetch-tags: true
+
+            - name: Make Gradle executable
+              run: chmod +x ./gradlew
+
+            - name: Setup Java 17
+              # https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md#java
+              run: echo "JAVA_HOME=$(echo $JAVA_HOME_17_X64)" >> "$GITHUB_ENV"
+
+            - name: Build with Gradle
+              uses: gradle/gradle-build-action@v2
+              with:
+                  arguments: checkFormatting
+                  cache-read-only: false

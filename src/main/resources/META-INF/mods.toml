@@ -1,0 +1,28 @@
+license = "AllRightsReserved"
+issueTrackerURL = "https://discord.apexstudios.dev/"
+modLoader = "javafml"
+loaderVersion = "[2,)"
+
+[[mods]]
+    modId = "${MOD_ID}"
+    displayName = "${MOD_NAME}"
+    version = "${MOD_VERSION}"
+    displayURL = "https://apexstudios.dev/${MOD_ID}"
+    # updateJSONURL = "https://api.modrinth.com/updates/${MOD_ID}/forge_updates.json"
+    credits = "ApexStudios"
+    logoFile = "banner.png"
+    description = "Library Mod required by all of ApexStudios' Mods"
+    authors = "Apex, FantasyGaming, RudySPG and TobiSPG"
+
+    [["dependencies.${MOD_ID}"]]
+        modId = "minecraft"
+        versionRange = "[1.20.4,1.20.5)"
+        type = "required"
+        ordering = "NONE"
+        side = "BOTH"
+    [["dependencies.${MOD_ID}"]]
+        modId = "neoforge"
+        versionRange = "[20.4,20.5)"
+        type = "required"
+        ordering = "NONE"
+        side = "BOTH"

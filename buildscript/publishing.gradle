@@ -1,0 +1,38 @@
+artifacts {
+    archives jar
+    archives sourcesJar
+}
+
+tasks.register('collectJars', Copy) {
+    dependsOn jar
+    from jar
+    into file('jars')
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'dev.apexstudios'
+            artifactId = MOD_ID
+            version = MOD_VERSION
+
+            artifact jar
+            artifact sourcesJar
+            changelog.publish it
+        }
+    }
+
+    repositories {
+        maven {
+            url 'https://maven.apexstudios.dev/releases'
+            credentials {
+                username 'apex'
+                password System.getenv('MAVEN_PASSWORD')
+            }
+
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+}

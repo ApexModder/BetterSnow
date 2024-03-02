@@ -1,0 +1,22 @@
+group = "dev.apexstudios.$MOD_ID"
+base.archivesName = MOD_ID
+version = MOD_VERSION
+
+java {
+    withSourcesJar()
+
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.java.get()))
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release.set(JavaLanguageVersion.of(libs.versions.java.get()).asInt())
+
+    javaToolchains {
+        compilerFor {
+            languageVersion.set(JavaLanguageVersion.of(libs.versions.java.get()))
+        }
+    }
+}

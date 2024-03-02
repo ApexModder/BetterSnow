@@ -1,0 +1,105 @@
+sourceSets {
+    main.resources {
+        exclude '.cache'
+        srcDirs += file('src/main/generated')
+    }
+
+    test {
+        resources.srcDirs = [ ]
+        java.srcDirs = [ ]
+    }
+}
+
+idea.module {
+    excludeDirs += [
+            file('.gradle'),
+            file('.idea'),
+            file('build'),
+            file('buildscript'),
+            file('gradle'),
+            file('run'),
+            file('src/main/generated/.cache')
+    ]
+}
+
+runs {
+    configureEach {
+        jvmArguments.add('-XX:+AllowEnhancedClassRedefinition')
+        jvmArguments.add('-XX:+IgnoreUnrecognizedVMOptions')
+        jvmArguments.add('-XX:+AllowRedefinitionToAddDeleteMethods')
+
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
+
+        modSources(sourceSets.main)
+        singleInstance true
+    }
+
+    client {
+        workingDirectory file('run/client')
+        singleInstance false
+    }
+
+    clientAuth {
+        configure('client')
+        workingDirectory file('run/client')
+        mainClass = 'net.covers1624.devlogin.DevLogin'
+        programArguments '--launch_target', 'cpw.mods.bootstraplauncher.BootstrapLauncher'
+    }
+
+    server {
+        workingDirectory file('run/server')
+    }
+
+    data {
+        workingDirectory file('run/client')
+        programArguments.addAll '--mod', MOD_ID,
+                '--client', '--server', '--validate',
+                '--output', file('src/main/generated').getAbsolutePath(),
+                '--existing', file('src/main/resources').getAbsolutePath()
+    }
+}
+
+if(file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
+    minecraft.accessTransformers.file file('src/main/resources/META-INF/accesstransformer.cfg')
+}
+
+subsystems.parchment.parchmentArtifact = "${libs.parchment.get()}:checked@zip"
+
+dependencies {
+    implementation libs.neoforge
+    runtimeOnly libs.devlogin
+}
+
+tasks.withType(ProcessResources).configureEach {
+    exclude '.cache'
+
+    var replacements = [
+            'MOD_NAME': MOD_NAME,
+            'MOD_ID': MOD_ID,
+            'MOD_VERSION': MOD_VERSION,
+    ]
+
+    inputs.properties replacements
+
+    filesMatching([ 'META-INF/mods.toml' ]) {
+        expand replacements
+    }
+}
+
+jar {
+    from tasks.createChangelog.outputFile
+
+    manifest {
+        attributes([
+                'Specification-Title': MOD_ID,
+                'Specification-Vendor': 'ApexStudios',
+                'Specification-Version': MOD_VERSION,
+
+                'Implementation-Title': MOD_ID,
+                'Implementation-Vendor': 'ApexStudios',
+                'Implementation-Version': MOD_VERSION,
+                'Implementation-Timestamp': new Date().format("yyyy-HH-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
